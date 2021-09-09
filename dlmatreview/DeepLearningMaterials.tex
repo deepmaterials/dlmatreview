@@ -1,0 +1,483 @@
+\documentclass[pdflatex,sn-mathphys]{sn-jnl}% Math and Physical Sciences 
+\jyear{2021}
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+\newtheorem{proposition}[theorem]{Proposition}% 
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+\usepackage{microtype}
+\raggedbottom
+\begin{document}
+\title[Recent advances and applications of deep learning methods in materials science]{Recent advances and applications of deep learning methods in materials science}
+\author*[1,2]{\fnm{Kamal} \sur{Choudhary}}\email{kamal.choudhary@nist.gov}
+\author[1]{\fnm{Brian} \sur{DeCost}}
+\author[3]{\fnm{Chi} \sur{Chen}}
+\author[4]{\fnm{Anubhav} \sur{Jain}}
+\author[1]{\fnm{Francesca} \sur{Tavazza}}
+\author[5]{\fnm{Ryan} \sur{Cohn}}
+\author[6]{\fnm{Cheol} \sur{WooPark}}
+\author[7]{\fnm{Alok} \sur{Choudhary}}
+\author[7]{\fnm{Ankit} \sur{Agrawal}}
+\author[8]{\fnm{Simon} \sur{Billinge}}
+\author[5]{\fnm{Elizabeth} \sur{Holm}}
+\author[3]{\fnm{Shyue Ping} \sur{Ong}}
+\author[6]{\fnm{Chris} \sur{Wolverton}}
+
+\affil[1]{\orgdiv{Materials Science and Engineering Division}, \orgname{National Institute of Standards and Technology}, \orgaddress{\city{Gaithersburg}, \postcode{20899}, \state{MD}, \country{USA}}}
+
+\affil[2]{ \orgname{Theiss Research}, \orgaddress{\city{La Jolla}, \postcode{92037}, \state{CA}, \country{USA}}}
+
+\affil[3]{\orgdiv{Department of NanoEngineering}, \orgname{University of California San Diego}, \orgaddress{ \postcode{92093}, \state{CA}, \country{USA}}}
+
+\affil[4]{\orgdiv{Energy Technologies Area, Lawrence Berkeley National Laboratory, Berkeley, CA, USA}}
+
+\affil[5]{\orgdiv{Department of Materials Science and Engineering, Carnegie Mellon University, Pittsburgh, PA, 15213, USA}}
+
+\affil[6]{\orgdiv{Department of Materials Science and Engineering, Northwestern University, Evanston, IL, 60208, USA}}
+
+
+\affil[7]{\orgdiv{Department of Electrical and Computer Engineering, Northwestern University, Evanston, IL, 60208, USA}}
+
+\affil[8]{\orgdiv{Department of Applied Physics and Applied Mathematics, Fu Foundation School of Engineering and Applied Sciences, Columbia University, New York, NY, 10027, USA}}
+
+
+\abstract{Deep learning (DL) is one of the fastest growing topics in materials data science, with rapidly emerging applications spanning atomistic, image-based, spectral, and textual data modalities. Deep learning allows analysis of unstructured data and automated identification of features. Recent development of large materials databases has fueled application of DL methods in atomistic prediction in particular. In contrast, advances in image and spectral data have largely leveraged synthetic data enabled by high quality forward models as well as by generative unsupervised DL methods. In this article, we first present a high-level overview of deep-learning methods, followed by a detailed discussion of recent developments of deep learning systems in atomistic simulation, materials image and spectral data analysis, and natural language processing. For each modality, we discuss applications involving both  theoretical and experimental data, typical modeling approaches and their strengths and limitations, and relevant publicly available software and datasets. We conclude the review with a discussion of recent cross-cutting work related to uncertainty quantification in this field and a brief perspective on limitations, challenges, and potential growth areas for DL methods specially in materials science. The application of DL methods in materials science presents an exciting avenue for futuristic materials discovery and design.}
+
+
+\keywords{Deep learning, Materials Science, Machine learning, Neural network}
+
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+
+‘Processing-structure-property-performance’ is the key and crux of Materials Science and Engineering (MSE)\cite{callister2021materials}. To begin with, comprehensive understanding of each of these components requires a large and diverse set of data.  Length and time scale of the investigation also vary significantly among the four components, adding further complexity\cite{saito2013computational}. For instance, structural information can range from detailed knowledge of atomic coordinates of elements through to the microscale spatial distribution of phases (microstructure) or fragment connectivity (mesoscale) or images, spectra etc, depending on the length scale of interest. The greatest difficulty, however, is to establish relationships between the parts, as such linkages are complicated and material class dependent. Both experimental and computational techniques are useful to identify such relationships. Due to rapid growth in automation in experimental equipment and immense expansion of computational resources, the size of public materials datasets has seen an exponential growth. Materials genome initiative (MGI)\cite{de2019new} and similar initiatives have led to the development of several large datasets such as OQMD\cite{kirklin2015open}, Materials Project\cite{jain2013commentary}, AFLOW\cite{curtarolo2012aflow}, NIST-JARVIS\cite{choudhary2020joint}, QM9\cite{ramakrishnan2014quantum}, NOMAD \cite{draxl2018nomad},  PDBBind\cite{wang2005pdbbind}, and HTEM \cite{zakutayev2018open}. According to the Findable accessible interoperable reusable (FAIR)\cite{wilkinson2016fair} guiding principles, scientific data should be findable, accessible, interoperable and reusable.  In addition, such an outburst of data requires automated analysis which is facilitated by machine-learning (ML) techniques\cite{friedman2001elements,vasudevan2019materials,schmidt2019recent,butler2018machine,xu2020deep,schleder2019dft,agrawal2019deep}. 
+Deep learning (DL)\cite{Goodfellow-et-al-2016} is a special branch of ML, which imitates human brain networks and is capable of learning unstructured. Deep learning allows self-capturing of features in data, unlike hand-crafted descriptors. It is most famous for its recent success on internet-scale datasets, on the order of thousands to millions of data points. DL applications are rapidly replacing conventional systems in many aspects of our daily lives as, for example, in image and speech recognition, web-searches, fraud detection, email/spam filtering, credit scores, and so on. DL techniques have been proven to provide exciting new capabilities in numerous fields (such as playing AlphaGo \cite{gibney2016google}, self-driving cars \cite{ramos2017detecting}, object recognition \cite{buduma2017fundamentals}, etc). 
+It has been shown to outperform other machine learning techniques in numerous scientific fields, such as chemistry, physics, biology, and materials science\cite{kearnes2016molecular,albrecht2017deep,ge2020deep,agrawal2019deep,erdmann2021deep}. Deep learning applications in MSE are still relatively new, and the field has not fully explored its potential. Deep learning methods have been shown to act as a complementary approach to physics based methods for materials design. While large datasets are often viewed as a prerequisite for successful DL applications, techniques such as transfer learning and active learning method can often make DL  feasible for small datasets as well \cite{chen2019graph,jha2019enhancing,cubuk2019screening}. 
+Traditionally, materials have been designed experimentally using trial and error methods with a strong dose of chemical intuition. In addition to being a very costly and time consuming approach, the number of material combinations is so huge that it is intractable to study experimentally, leading to the need for empirical formulation and computational approaches. While computational approaches (such as density functional theory, molecular dynamics, Monte Carlo, phase-field,  finite elements) are much faster and cheaper than experiments, they are still limited by length and time scale constraints and respective domains of applicability. DL methods can be agnostic to the domain and can be applied throughout different computational as well as experimental scopes. DL can offer substantial speedups compared to conventional scientific computing, and for some applications are reaching an accuracy level comparable to physics-based or computational models.
+Generally, entering a new domain of materials science and performing cutting-edge research requires years of research, a group-specific training, and is almost an art. Fortunately, we now live in an era of increasingly open data and resources. Mature, well-documented DL libraries makes DL research much more easily accessible and low barrier for newcomers than almost any other research field. Testing and benchmarking methodologies such as underfitting/overfitting/cross-validation \cite{vasudevan2019materials,schmidt2019recent,artrith2021best} etc. concepts are common knowledge, and standards for measuring model performance are well established in the community.
+DL provides new approaches for investigating material phenomena and has pushed materials scientists to expand their traditional toolset. 
+Despite their many advantages, DL methods have disadvantages too, the most significant one being their black-box nature which may  hinder physical insights into the phenomena under examination. Evaluating and increasing  interpretability and explainability of DL models still remains an active field of research. Generally a DL model has a few thousands to millions of parameters, which makes it difficult to interpret easily.
+Although there are several good recent reviews of ML applications in MSE, deep learning for materials has been advancing rapidly, warranting a dedicated review to cover the explosion of research in this field.  In this article, we discuss some of the basic principles in deep learning methods and then highlight some of the recent advances in deep learning applications for materials science. The paper addresses applications based on both experimental and theoretical data sources, as well as different length and time scales of materials characterization. 
+
+First, we present an overview of deep-learning methods, followed by a comprehensive discussion of recent developments of deep learning systems in atomistic simulation, materials image and spectral data analysis, and natural language processing. For each section, we show a) application of DL involving both theoretical and experimental data, b) typical modeling approaches, c) their strengths and limitations, and d) relevant publicly available software and datasets, where applicable. We finally present a discussion of uncertainty quantification in this field and a brief perspective on limitations, challenges, and potential growth areas for materials science. 
+
+
+
+
+\section{Basics of deep learning}\label{sec:basics}
+
+\subsection{General machine learning concepts}\label{sec:general-concepts}
+
+
+Artificial intelligence \cite{friedman2001elements} is a general term that enables computers to understand intelligence to mimic human behavior. Machine learning is a subset of AI, and provides the ability to learn without explicitly being programmed for a given dataset such as playing chess, social network recommendation etc. Some of the common ML technologies are linear regression, decision trees etc. in which generalized models (such as decision-tree, Random forest, neural networks) are trained to learn coefficients for the model for a given dataset. Now based on the structure of the dataset, different ML techniques can be applied. For simple structured dataset (for example which can be fit on a spreadsheet) traditional ML techniques can be easily applied. For unstructured data i.e. not based on a fixed grid (such as pixels or features from an image, sounds, text, graphs etc.) applying traditional ML techniques such as decision-tree becomes challenging because users have to first extract generalized meaningful representations or features themselves (such as calculating pair-distribution or higher order functions for an atomic structure and representing chemical compositions with elemental property attributes) and then train the ML models. Hence, the process becomes time consuming, brittle and not easily-scalable. Here, deep learning techniques become more important. DL methods are based on artificial neural network techniques in ML but are trained with multiple or deeper layers of neurons (more than three hidden layers at least) so that each layer could learn a different representation from the data. According to the "Universal approximations" \cite{kidger2020universal} multi-layer perceptron can approximate a continuous function to arbitrary accuracy. Data in materials science are generally unstructured (such as atomic structures, STM images, electronic absorption spectra, research papers) and hence DL is of special interest. 
+
+
+\subsection{Neural network}\label{sec:neural-nets}
+
+\subsubsection{Perceptron}
+
+A perceptron or a single artificial neuron \cite{minsky2017perceptrons} is the building block of artificial neural networks (ANs) and performs forward propagation of information. For a set of inputs x1,x2,...,xm to the perceptron, we assign floating number weights (and biases to shift wights) w1,w2,...wm and then we multiply them correspondingly together to get a sum of all of them. 
+
+\subsubsection{Activation function}
+
+Then we pass through the sum through a non-linear activation function to produce an output y. An activation function takes a real number and converts it into a scalar output between 0 and 1 which is synonymous to probabilities. Activation functions are important to approximate the non-linearity in the data as most of the real-life problems are non-linear. Non-linearities allow us to model arbitrarily complex functions. There are various well-known activation functions such as Sigmoid, hyperbolic tangent (tanh), and rectified linear unit (ReLU).
+
+
+\subsubsection{Loss function and Gradient descent}
+Single or multi-output neural networks can be thought of as collections of multiple perceptrons mentioned above with different sets of weights (W(1), W(2),...W(N)) leading to a dense neural network architecture. 
+The weight matrices are initialized randomly or obtained from a pre-trained model and the loss function (also known as objective function or empirical risk) is calculated by comparing the output of the neural network and the known target value data. The loss function with the network weights are continuously updated until desired accuracy is achieved. The gradient of the loss with respect to the weights guides the direction of maximum ascent during the training. This is facilitated using gradient descent algorithms and a series of chain rules for differential operations of loss function with respect to network weights (also known as back-propagation). Some of the common gradient descent algorithms are: stochastic gradient descent (SGD), Adam, Adagrad etc.   Learning parameter is gradient descent and acts as an important parameter. Except SGD, all other methods use adaptive learning parameter tuning. Depending on the objective such as classification or regression, different loss functions such as BCE, NLLL or MSE are used. Fortunately, various well-known packages such as PyTorch, TensorFlow already implement the setting up of such neural networks, setting back-propagation and setting loss function etc for a set of inputs automatically.
+The inputs of a neural network are generally scaled i.e. normalized to have zero mean and unit standard deviation. Scaling is also applied to the input of hidden layers ll (called batch normalization) to improve the stability of ANNs. 
+
+\subsubsection{Epoch and mini batches}
+A single pass of the entire training data is called an epoch, and multiple epochs are performed until the weights converge. In DL, datasets are usually large and computing gradients for the entire dataset and network becomes challenging. Hence, the forward passes are done with small subsets of the training data called mini-batches. Therefore,  epoch consists of multiple mini-batches.  Batch sizes are usually on the order of tens to hundreds. Batch sizes can be considered as a hyperparameter to the model and are correlated with the learning rates. 
+
+\subsubsection{Underfitting, overfitting and regularization}
+During an ML training, the dataset is split into training, validation and test sets such in the ratio of 80:10:10. In some studies, author's include a test set also in the evaluation set such as a 90:10 train-test split.. A model is said to be underfitting if the model performs poorly and lacks capacity to fully learn the training data. A model is said to overfit if the model performs too well on the training data but doesn't perform well on the evaluation data. Overfitting suggests the model is too complex, and has extra parameters than that might be needed and doesn't generalize well. Overfitting is a common problem in DL training and is controlled with regularization techniques which can be of two types: dropout and early stopping. Regularization discourages the model from remembering the training data completely so that the model can be generalizable. One of the most popular regularizations is dropout in which we randomly set the activations for a NN layer (such as 50 percent )  to zero. In early stopping, further epochs for training are stopped before the data is overfit i.e. performance on the evaluation flattens or decreases. Early stopping is generally on the order of tens to hundreds of epochs to check the test accuracy.
+
+
+\subsection{Convolution and CNN}\label{sec:cnn}
+n a fully connected neural network (as described above) each neuron in one layer is connected to all neurons in the next layer \cite{lecun1995convolutional}. Such fully connected NNs have a huge number of parameters (weights and biases), are prone to overfitting and lack spatial information. CNNs can be viewed as a regularized version of multilayer perceptrons and are used to capture spatially correlated features. There are three main components in CNNs: a) convolution, b) introducing non-linearity , c) pooling. 
+In CNNs we use convolution functions with multiple kernels or filters (like patches) with trainable weights or parameters, instead of general matrix multiplication. These filters are matrices with a relatively small number of rows and columns that convolve over the input to automatically extract high-level local features in the form of feature maps. The filters slide/convolve (element wise multiply) across the input with a fixed number of strides to produce the feature map and the information thus learnt is passed to the hidden layers. These filters can be one, or two or three dimensional depending on the input data. 
+Similar to the fully connected NNs, non-linearities such as ReLU are then applied that allows us to deal with non-linear and complex data. The pooling operation preserves spatial invariance, downsamples and reduces dimension of each feature map obtained after convolution. These downsampling/pooling can be of different types such as max-pooling, min-pooling, average pooling and sum pooling. 
+After one or more convolutional and pooling layers, the outputs are flattened to a one-dimensional vector. This vector is then used as input to one or more fully connected layers to finally give the CNN predictions in terms of probability distribution (for classification) or a single real number (for regression). While typically a CNN consists of both convolution and normal hidden layers, fully convolutional neural networks (FCNN) are constructed with all convolution layers and are used in semantic segmentation tasks to detect multiple objects in an input. FCNNs use both the downsampling as well as upsampling operations.
+
+\subsection{Graph neural networks}\label{sec:gnn}
+
+\subsubsection{Graphs and their variants}
+Classical CNNs as described above are based on a regular grid Euclidean data (such as 2D grid in images and 1D sequence in images). However, real life data-structures such as social networks, pixels of images,  knowledge graphs, word-vectors, recommender systems, atomic structures, bio and materials informatics can be non-grid and non-Euclidean based. Hence, there is a need to use a universal framework that can model both structured as well as unstructured data. This is facilitated by graphs. 
+Mathematically, a graph G is defined as a set of nodes/vertices V and a set of edges/links E: G=(V,E)\cite{west2001introduction,wang2019deep}. An edge is formed between a pair of two nodes and contains the relation information between the nodes. Each node and edge can have attributes/features associated with it. An adjacency matrix A is a square matrix  indicating if there are connections between the nodes or not in the form of 1 and 0. A graph can be undirected/directed, weighted/unweighted, homogeneous/heterogeneous, static/dynamic. An undirected graph captures symmetric relations between nodes, while an directed one captures asymmetric relations such that Aij!=Aji. In a weighted graph, each edge is associated with a scalar weight. In a homogeneous graph, all the nodes represent instances of the same type and all the edges capture relations of the same type while in a heterogeneous graph, the nodes and edges can be of different types. Heterogeneous graphs provide an easy interface for managing nodes and edges of different types as well as their associated features. When input features or graph topology vary with time, they are called dynamic graphs otherwise they are considered static.
+https://arxiv.org/ftp/arxiv/papers/1812/1812.08434.pdf
+https://docs.dgl.ai/en/0.6.x/tutorials/models/index.html
+
+
+\subsubsection{Types of GNNs}
+
+Graph neural networks (GNNs) are deep learning methods that operate on graph domain and can capture the dependence of graphs via message passing between the nodes and edges of graphs. There are two key steps in GNN training: a) we first aggregate information from neighbors and b) update the nodes. Importantly, aggregation is permutation invariant. GNNs are probably the most popular AI method at present. Based on the aggregation methodology, there could be different variants of GNNs such as Graph convolutional network (GCN)~\cite{kipf2016semi}, Graph attention network (GAT)~\cite{velivckovic2017graph}, Relational-GCN~\cite{?}, graph recurrent network (GRN)~\cite{?}, Graph isomerism network (GIN)~\cite{xu2018powerful}, and Line graph neural network (LGNN)~\cite{chen2017supervised}.
+Graph convolutional neural networks are the most popular GNNs. In GCN, node attributes h, which can be different for different applications, are updated recursively following the Eq. \ref{eq:gcn-update}. 
+
+\begin{equation}\label{eq:gcn-update}
+x
+\end{equation}
+
+
+Here f is a nonlinear activation function. The node attributes are multiplied by weight matrices W. We also want to aggregate information from neighbors, so we take the representation of neighbors hj and let the neural network decide how to transform and keep it using matrix elements U for a given task. Now in the aggregation function with cij normalization matrix ,we sum over all transformed neighbors and normalize neighbors differently for each neighbor with coefficients cij. Normalizing sum here is a permutation invariant function i.e. however we aggregate information from neighbors has to be insensitive to order. We sum over all the neighbors c which are updated by the neural networks. Now as we aggregate the information from the nodes similar to CNNs and can have pooling operations like sum or average, this method is called graph convolution. We note that the equation x is local i.e. only depends on the neighborhood Ni of node i, and is independent of graph size. This  makes the space/time complexity O(E) reducing to O(n) for sparse graphs making GCNs highly parallelizable on GPUs .Most importantly, the graphs can have different numbers of nodes and edges and the same methodology can be applied to all of them because the GCNs primarily care about individual nodes and their neighbors. 
+In graph attention networks, the cij's are constant but are a function of the neighbors and are learnt. GAT uses multi-head attention among neighborhoods of a node to enhance the capacity and expressiveness of the model.  Relational-GCN allows multiple edges among two entities of a graph though edges with distinct relationships could be encoded differently. LGNN uses representations of both the original graph and its line-graph counterpart. 
+\subsection{Deep generative models (VAE and GAN)}\label{sec:generative}
+
+While the above deep learning frameworks are based on supervised machine learning (i.e. we know the target or ground truth data such as in classification and regression) and discriminative (i.e. learn differentiating features between various datasets), many ML tasks are based on unsupervised (such as clustering) datasets and are generative (i.e. aim learn underlying distributions). Generative models are used to a) generate data samples similar to the training set with variations i.e. augmentation, b) learn good generalized latent features, c) guide mixed reality applications such as virtual try-on. There are various types of generative models, out of which the most commons one are : a) variational encoders (VAE) which explicitly define and learn likelihood of data, b) Generative adversarial networks (GAN) which learn to directly generate samples from model's distribution, without defining any density function.
+
+\subsection{Deep reinforcement learning}\label{sec:rl}
+
+RL deals with tasks so that a computational agent learns to make decisions by trial and error. Deep RL uses deep learning into the RL framework, allowing agents to make decisions from unstructured input data. In traditional RL, Markov decision process (MDP) is used in which an agent at every timestep is in a taking action receives a scalar reward and transitions to the next state according to system dynamics to learn policy in order to maximize returns. However, in traditional RL, the states are high-dimensional (such as continuous images from a STEM or spectra from XRD) which act as an input to DL methods. DRL architectures can be both model based or a model free.
+
+\subsection{Sequence-to-sequence models}\label{sec:sequence}
+Traditional machine learning methods operate on fixed length inputs and produce fixed-length outputs. In sequence-to-sequence models, a neural network is able to accept inputs and produce outputs of variable size. Although such models can operate on many types of data, we will concentrate on applications to learning from text sequences such as published journal articles or abstracts.
+Traditionally, learning on text sequences involves first generating a fixed-length input from the text. For example, the "bag-of-words" approach simply counts the number of instances of each word in a document and produces a fixed-length vector that is the size of the overall vocabulary, which each element of that vector representing a particular word and its value corresponding to the (normalized) number of times that word is mentioned in the document. However, true its name, the "bag of words" representation does not preserve information about word order, sentences, or context and thus is not able to accurately solve complex problems in text mining.
+In contrast, sequence-to-sequence models can take into account sequential / contextual information about each word and produce outputs of arbitrary length. One common application of such models in the materials science realm is named entity recognition (NER), in which an input sequence of words (e.g., a chemical abstract) is mapped to an output sequence of "entities" or categories. For example, each word in the input sequence might be categorized as a material, a synthesis method, or not part of any defined category. Other examples of sequence-to-sequence tasks include language translation and new text generation based on a prompt, although to our knowledge these applications have not yet been specifically applied in the materials science realm.
+An early form of sequence-to-sequence model is the recurrent neural network, or RNN. Unlike the fully connected NN architecture, where there is no connection between hidden nodes in the same layer, but only between nodes in adjacent layers, RNN have feedback connections and each hidden layer can be unfolded processed as traditional NN sharing same weight matrices. There are different types of RNNs, out of which most common ones are: gated recurrent unit recurrent neural network (GRURNN), long short-term memory (LSTM) network, and clockwork RNN (CW-RNN) \cite{jing2018deep}. The variations typically differ in how well they can preserve contextual information from previous tokens in the sequence to future tokens, with LSTMS usually outperforming traditional RNNs. For example, an LSTM unit comprises of a cell, an input gate, an output gate and a forget gate. The cell remembers values over previous time intervals and the three gates regulate the flow of information into and out of a cell. However, all such RNNs suffer from some drawbacks, including: (i) difficulty of parallelization and therefore difficulty training in large data sets and (ii) difficulty in preserving long-range contextual information due to the "vanishing gradient" problem. Nevertheless, as we will later describe, LSTMs have been successfully applied to various NER problems in the materials domain.
+More recently, sequence-to-sequence models based on a "transformer" architecture such as Google's BERT model have helped address some of the issues of traditional RNNs. Rather than pass a state vector that is iterated word-by-word, such models use an attention mechanism to allow access to all previous words simultaneously without explicit time steps. This facilitates parallelization and also better preserves long-term context. The first half of this architecture, the encoder, transforms the input sequence to a "hidden layer" encoding. The input sequence is subjected to several steps, including word embeddings to transform each word into a meaningful vector representation, a positional embedding to capture the location of each word in the text, and an attention mechanism that captures the important context words to also consider for each word. The resulting hidden layer encoding is fed to a "decoder" layer that produces output tokens based on this input; the generated output is appended to the input and the process repeats until an "end of sequence" token is generated. To date, we are not aware of the materials science community publishing results using transformer architectures.
+
+
+\section{Applications of DL methods}\label{sec:applications}
+Some of the main components of successfully applying DL to materials are: 
+1) acquiring large and diverse datasets (on the order of 10000 or more) and its preliminary analysis of data spread, 2) determine a vector or graph representation of the input samples, 3) selection of appropriate DL method such from ones discussed above, 4) selection appropriate performance metric such as MAE \& MSE  (regression)/ F1 score (classification) / reconstruction loss (VAE) etc, 5) tuning the hyper-parameters for the DL model, 6) splitting the entire dataset in to train-test or train-validation-test (preferred) splits as generally new data won't be generated to test the model, 7) monitor learning curves to avoid overfitting. One of the biggest challenges in the field of DL for materials is finding a large enough dataset. Unlike other areas of AI applications (such as photos in Google Images/Facebook,videos from YoutTube) materials data is harder to generate. Thankfully due to FAIR principles and MGI such datasets have been made publicly available and easily adaptable, especially for computation and for relatively less scale experiments.After obtaining the dataset it's important to analyze/visualize the datasets to get an idea of the data spread for reasons such as ML models are generally good for interpolation and not for extrapolation. The second step i.e. processing the unstructured data is also challenging because although seemingly completely unstructured, the materials data such as images/spectra/atomic positions need to be converted to a generalized representation such as hot-encoded features or graphs to be input in the DL models. In the following sections we discuss some of the key areas of materials science in which DL has been applied with available links to repos and datasets that help in reproducibility of the work.
+
+
+
+\subsection{Full Atomistic structure representations}\label{sec:atomistic}
+One of the most common applications of DL models for atomistic data is for pre-screening of materials for conventional computational methods such as DFT and MD. As mentioned above DL is particularly  suitable for large and unstructured data. If we consider 118 elements in the periodic table and even choose 5 elements (common for an alloy), the total number of cases are 118 choose 5 = 1.75x108 and 6.21x1033 if we choose 50 elements. Note that this is just elemental considerations. Including different space groups (230), prototypes, deformed (stretch, compress, shear etc) , defective (vacancies, intersititals, substitutions, grain boundaries, voids, dislocations etc), crystalline, amorphous the possible number of materials could easily reach 10100 which is huge. It is almost impossible to simulate such a huge number of materials using conventional methods such as DFT and DL models become important.
+
+The atomic structure and chemistry data doesn't lie on a predefined fixed grid hence deep learning is a compelling tool to tackle such problems. The atomic structure information is obtained from XRD/NMR etc experiments and also hypothetical structures can be generated using methods such as SQS and genetic algorithms. In Table~\ref{tab:atomistic-datasets} we provide some of the commonly used datasets used for atomistic DL noldes for molecules,solids and proteins.
+There have been several previous attempts to represent crystals and molecules on a fixed size descriptors such as Coulomb Matrix, CFID, PRDF, Voronoi tessellation. Some of the common applications of such ML models are for perovskites, 2D materials, dielectric, piezoelectric, solar-cells, thermoelectrics, topologically non-trivial materials, high-strength, catalytic materials etc. Recently graph neural network methods such as SchNet, CGCNN, MegNet, DimeNet, ALIGNN, iCGCNN have been shown to surpass previous hand-crafted feature set and hence they can be applied to the properties of interest mentioned above. In Table~\ref{tab:atomistic-deep-learning} we provide deep learning software packages used for atomistic materials design. The type of models includes general property (GP) predictors and interatomic force fields (FF). The models have been demonstrated in molecules (Mol), solid state materials (Sol) or proteins (Pro). For some force fields, high performance large scale implementations (LSI) that leverage paralleling computing exist. Some models use only compositions (Comp) as inputs and are tagged accordingly. Such methodologies have been used to train force-fields for molecular dynamics simulations as well.
+
+\subsubsection{Software libraries }
+[TODO: Arrange alphabetically]
+\begin{table}[h]
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:atomistic-deep-learning}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model name & Reference implementation  & Ref\\
+\midrule
+SchNetPack  & \url{https://github.com/atomistic-machine-learning/schnetpack}    & \cite{schutt2018schnetpack}\\
+ALIGNN & \url{https://github.com/usnistgov/alignn} & \cite{?}\\
+CGCNN & \url{https://github.com/txie-93/cgcnn} & \cite{?}\\
+MEGNet & \url{https://github.com/materialsvirtuallab/megnet} & \cite{?}\\
+DimeNet & \url{https://github.com/klicperajo/dimenet} & \cite{?}\\
+MPNN   & \url{https://github.com/priba/nmp_qc}  &  \cite{?}\\
+ANI   & \url{https://github.com/isayev/ASE_ANI}     & \cite{?}  \\
+Amp  & \url{https://bitbucket.org/andrewpeterson/amp}    & \cite{?}  \\
+TensorMol & \url{https://github.com/jparkhill/TensorMol}   & \cite{?}  \\
+PROPhet  & \url{https://github.com/biklooost/PROPhet}    & \cite{?}  \\
+DeepMD & \url{https://github.com/deepmodeling/deepmd-kit} & \cite{?} \\
+AENet& \url{https://github.com/atomisticnet/aenet} & \cite{?} \\
+E3NN & \url{https://github.com/e3nn/e3nn}  & \cite{?} \\
+
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+
+\subsubsection{Datasets}
+[TODO: Arrange alphabetically]
+
+\begin{table}[h]
+
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:atomistic-datasets}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+DB name & Datasize & Web & Ref\\
+\midrule
+QM9   &  134k   & \url{http://quantum-machine.org/datasets/} & \cite{ramakrishnan2014quantum}  \\
+ANI   &  20 mil  & \url{https://github.com/isayev/ANI1_dataset} & \cite{smith2017ani}  \\
+MD17   &  1 mil   & \url{http://quantum-machine.org/datasets/#md-datasets} & \cite{chmiela2017machine}  \\
+Tox21   &  760k & \url{https://tox21.gov/resources/}   & \cite{thomas2018us}  \\
+CCCBDB   &  2069 & \url{https://cccbdb.nist.gov/}   & ref  \\
+HOPV15   &  350   & \url{https://doi.org/10.6084/m9.figshare.1610063} & ref  \\
+C2DB   &  4000 & \url{https://cmr.fysik.dtu.dk/c2db/c2db.html}   & \cite{johnson2006nist}  \\
+FreeSolv   &  504 & \url{https://github.com/MobleyLab/FreeSolv}   & \cite{mobley2014freesolv}  \\
+MProject   &  144k & \url{https://materialsproject.org/}   & \cite{jain2013commentary}  \\
+OQMD   &  816k & \url{http://oqmd.org/}   & \cite{kirklin2015open}  \\
+AFLOW   &  3.5 mil & \url{http://www.aflowlib.org/}   & \cite{curtarolo2012aflow}  \\
+JARVIS-DFT   &  56k & \url{https://jarvis.nist.gov/jarvisdft/}   & \cite{choudhary2020joint}  \\
+JARVIS-FF   &  2.5k & \url{https://jarvis.nist.gov/jarvisff/}   & \cite{choudhary2020joint}  \\
+NOMAD   &  11 mil & \url{https://nomad-lab.eu/prod/rae/gui/search}   & \cite{draxl2018nomad}  \\
+MCloud   &  22 mil & \url{https://www.materialscloud.org/home#statistics}   & \cite{talirz2020materials}  \\
+CoreMOF   &  163k   & \url{https://mof.tech.northwestern.edu/} & \cite{chung2019advances}  \\
+QMOF   & 22k &  \url{https://github.com/arosen93/QMOF}   & \cite{rosen2021machine}  \\
+PDBBind  & 23k &  \url{http://www.pdbbind.org.cn/}   & \cite{wang2005pdbbind}  \\
+MOAD   &  39 k & \url{http://www.bindingmoad.org/}   & \cite{benson2007binding}  \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsubsection{Applications}
+
+\subsection{Chemical formula and segment representations}\label{sec:stoichiometric}
+One of the earliest applications for deep learning included smiles for molecules, elemental fractions and chemical descriptors for solids and sequence of protein names as descriptors. Such descriptors lack explicit inclusion of atomic structure information but are still useful for various pre-screening applications for both theoretical and experimental data. 
+
+\subsubsection{Chemical formula representation}
+
+One of the common examples is representing chemical formulas as hand-crafted descriptors (such as average of electronegativity, boiling point of constituent elements as done in MagPie and its variant packages), SOAP, SISSO, CFID-Chem and elemental fractions. Statistical and mathematical operations such as average, max, min , median, mode, and exponentiation are carried out on elemental properties of the constituent element, each of which act as descriptors of the whole compound. These chemical features can range from 45 descriptors (such as MagPie) to CFID-Chem (138) etc. Elemental fraction matrix is another method to represent a chemical formula in which a fixed size elemental array (such as 103 for 103 periodic table elements) are created and elemental array positions are occupied with constituent element fractions representing a fixed size array for all the possible chemical formulae. Traditional ML methods such as Random Forest can also be applied to such representations as well as ANNs. There have been libraries of such descriptors developed such as MatMiner~\cite{ward2018matminer} and DScribe~\cite{}. Some examples of such models are given in Table~\ref{tab:stoichiometric}. Such representations are especially useful for experimental dataset such as superconducting material dataset where actual atomic structure is not known. However, these representations cannot distinguish for example different point groups and space groups and hence cannot be used in establishing actual structural-property relationships. Such methods have been used for diverse DFT datasets such as OQMD, JARVIS-DFT, AFLOW, MP as well as experimental datasets such as SuperCon for quick pre-screening applications.
+
+
+[TODO: Arrange alphabetically]
+\begin{table}[h]
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:stoichiometric}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model name & Reference implementation  & Link\\
+\midrule
+MatMiner & \url{https://github.com/hackingmaterials/matminer} & \cite{ward2018matminer} \\
+MagPie   & \url{https://bitbucket.org/wolverton/magpie}  & \cite{ward2016general}  \\
+ElemNet   & \url{https://github.com/NU-CUCIS/ElemNet}    & \cite{jha2018elemnet}  \\
+IRNet   & \url{https://github.com/NU-CUCIS/IRNet}   & \cite{jha2019irnet}   \\
+Roost  & \url{https://github.com/CompRhys/roost}  & \cite{goodall2020predicting}   \\
+CrabNet  & \url{https://github.com/anthony-wang/CrabNet}   & \cite{Wang2021crabnet}  \\
+CFID-Chem & \url{https://github.com/usnistgov/jarvis/} & \cite{choudhary2018machine} \\
+Atom2vec & \url{https://github.com/idocx/Atom2Vec} & \cite{zhou2018learning} \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+https://chemrxiv.org/engage/api-gateway/chemrxiv/assets/orp/resource/item/60c74849567dfefc91ec49a1/original/is-domain-knowledge-necessary-for-machine-learning-materials-properties.pdf
+
+Other similar representations such as SMILES and protein sequences attempt to implicitly capture both the chemical and bonding structural information.
+
+
+\subsubsection{Smiles and fragment representation}
+
+The simplified molecular-input line-entry system (SMILES) is a method to represent elemental and bonding for molecular structures using short ASCII strings. SMILES can express structural differences including the chirality of compounds making it more useful than simply chemical formula. A SMILES string is a simple grid-like (1-D grid) structure that can represent molecular sequences such as DNA and protein sequences also. In addition to the chemical constituents as in chemical formula, bondings (such as double and triple bondings) are represented by special symbols (such as '=' and '\#'). The presence of a branch point indicated using a left-hand bracket “(” while the right-hand bracket “)” indicates that all the atoms in that branch have been taken into account. SMILES strings are represented as a distributed representation termed a SMILES feature matrix (as a sparse matrix), and then we apply CNN to the matrix similar to image data. The length of the SMILES matrix is generally kept fixed (such as 400) and in addition to the SMILES multiple elemental attributes and bonding attributes (such as chirality, aromaticity) can be used. One of the most common datasets using SMILES for DL is Tox21 to predict molecular toxicity. Due to the limitations to enforce the generation of valid molecular structures from SMILES, fragment based models are developed such as DeepFrag and DeepFrag-K.
+https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2523-5
+https://pubs.acs.org/doi/10.1021/acscentsci.7b00572
+
+
+\begin{table}[h]
+
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab1}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model name & Reference implementation  & Ref\\
+\midrule
+DeepSMILES  & \url{https://github.com/baoilleach/deepsmiles}  & \cite{?} \\
+ChemicalVAE  & \url{https://github.com/aspuru-guzik-group/chemical_vae} & \cite{?}  \\
+DeepChem & \url{https://github.com/deepchem/deepchem} & \cite{?} \\
+DeepFRAG  & \url{https://git.durrantlab.pitt.edu/jdurrant/deepfrag/}  &  \cite{?}\\
+DeepFRAG-k  & \url{https://github.com/yaohangli/DeepFragK/}  &  \cite{?}\\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+
+
+- https://www.biorxiv.org/content/10.1101/2021.01.07.425790v1.full
+- Isayev graphlet representation
+
+
+
+
+
+\subsection{Spectral models}\label{sec:spectral}
+
+When electromagnetic radiation hits materials, the interaction between the radiation and matter measured as a function of the wavelength or frequency of the radiation produces the spectroscopy. By studying spectroscopy, researchers can gain insights into the materials’ composition, structures, dynamic properties, etc. Various spectroscopy techniques have laid the foundation of materials characterizations. For instance, X-ray diffraction (XRD) has been used to characterize the crystal structure of synthesized materials for decades. Traditionally, spectroscopy analysis undertakes a comparative process where references spectra with known structure or property are compared to the characterized spectra. This practice has mainly been a human-involved process, requiring careful design of experiments before the measurements or the availability of spectra of known materials. In recent years, with the advances in high-throughput experiments and computational data, spectroscopy data has multiplied, giving opportunities for researchers to learn from the data and potentially displace the conventional methods in analyzing such data. This section covers deep learning studies in various spectroscopy data, aiming to offer practice examples and insights.
+
+Some of the common spectra database for spectra data is shown in Table X.
+https://pubs.acs.org/doi/pdf/10.1021/acs.jpclett.1c02305
+\subsubsection{Databases}
+
+
+[TODO: Arrange alphabetically]
+
+\begin{table}[h]
+
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:atomistic-datasets}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+DB name & Datasize & Web & Ref\\
+\midrule
+MP XAS-DB  &  22k   & \url{https://materialsproject.org/} & \cite{mathew2018high,chen2021database}  \\
+JARVIS-DFT Dielectric function  &  16k   & \url{http://jarvis.nist.gov/jarvisdft} & \cite{choudhary2018computational}  \\
+JARVIS-DFT Infrared  &  5k   & \url{http://jarvis.nist.gov/jarvisdft} & \cite{choudhary2020high}  \\
+RRUFF  &  3527   & \url{https://rruff.info} & \cite{lafuente20151}  \\
+ICDD XRD  &  1076439   & \url{https://www.icdd.com/pdf-product-summary/ } & \cite{?}  \\
+ICSD XRD  &  150000   & \url{https://icsd.nist.gov/} & \cite{belsky2002new}  \\
+MP XRD  &  140000   & \url{https://materialsproject.org/} & \cite{jain2013commentary}  \\
+JARVIS-DFT XRD  &  60000   & \url{https://jarvis.nist.gov/jarvisdft/} & \cite{choudhary2020joint}  \\
+Raman open database  &  1133   & \url{https://solsa.crystallography.net/rod/index.php } & \cite{el2019raman}  \\
+Chemistry WebBook  &  1133   & \url{https://webbook.nist.gov/chemistry/ } & \cite{?}  \\
+Spectral data base system  &  34600  & \url{http://sdbs.riodb.aist.go.jp/sdbs/cgi-bin/cre_index.cgi} & \cite{?}  \\
+NMRShiftDB  &  44371  & \url{https://nmrshiftdb.nmr.uni-koeln.de/} & \cite{steinbeck2003nmrshiftdb}  \\
+SpectraBase  &  ?  & \url{https://spectrabase.com/} & \cite{steinbeck2003nmrshiftdb}  \\
+SOP spectral library  &  325  & \url{https://soprano.kikirpa.be/index.php?lib=sop} & \cite{fremout2012identification}  \\
+HTEM  &  140000  & \url{https://htem.nrel.gov/} & \cite{zakutayev2018open}  \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+Currently, large-scale and element-diverse spectral data mainly exist in computational databases. For example, Choudhary et al. \cite{Choudhary.2020.no.148} calculated the infrared spectra, piezoelectric tensor, Born effective charge tensor, dielectric response, etc., as part of the JARVIS-DFT DFPT database. The Materials Project has established the largest computational X-ray absorption database (XASDb), covering the K-edge X-ray near-edge fine structure (XANES)~\cite{Mathew.2018.no.149} and the L-edge XANES~\cite{Chen.2021.no.150}. The database currently hosts more than 400,000 K-edge XANES site-wise spectra and ~90,000 L-edge XANES site-wise spectra of many compounds in the Materials Project. The corresponding experimental XAS data, however, is on the order of hundreds, as seen in the EELSDb {Ewels, 2016 no.151} and the XASLib (\url{https://xaslib.xrayabsorption.org/}). Collecting large experimental spectra databases that cover a wide range of elements presents to be a difficult task as a single-group effort. Hence, collective efforts have been focusing on curating data extracted from different sources, as found in the RRUFF Raman, XRD and chemistry database \cite{Lafuente.2015.no.152}, the open Raman database \cite{El.Mendili.2019.no.153}, the SOP spectra library \cite{Fremout.2012.no.154}, etc. However, data consistency is not guaranteed.  Recent advances have made high-throughput measurements of experimental spectra possible, giving rise to new perspectives for spectral data generation and modeling. Such examples include the HTEM database \cite{Zakutayev.2018.no.143} that contains 50,000 optical absorption spectra, the UV-Vis database of ~180000 samples from the Joint Center for Artificial Photosynthesis, etc.  
+
+Due to the vast popularity of XRD, the XRD spectra became one of the first test grounds for deep learning models. Phase identification from XRD can be seamlessly mapped into a classification learning problem. Unlike the traditional analysis of XRD data, where the spectra are treated as convolved, discrete peak positions and intensities, deep learning methods treat the data as an integrated pattern, similar to an image. Unfortunately, a significant number of experimental XRD data in one place are not readily available at the moment. Nevertheless, extensive, high-quality crystal structure data makes creating simulated XRD trivial.~\cite{Park.2} calculated 150000 XRD patterns from the ICSD3 structural database~\cite{icsd} and then used CNN models to predict structural information from the simulated XRD patterns. The accuracies of the CNN models reached 81.14\%, 83.83\%, and 94.99\% for space-group, extinct-group, and crystal-system classifications, respectively. The authors demonstrated that the CNN deep learning approach has the advantage over the conventional XRD analysis method since it treats both the low-angle and high-angle diffraction equally. At the same time, the latter is difficult to deal with in traditional XRD analysis.
+Similarly,~\cite{Zaloga.4} also used the ICSD database for XRD patterns generation and CNN models to classify crystals. The models achieved 90.02\% and 79.82\% accuracy for crystal systems and space groups, respectively. Although both works have shown excellent accuracies, it should be noted that the ICSD database contains many duplicates, and such duplicates should be filtered out to avoid information leakage. Later, \cite{Lee.5} developed a more pragmatic CNN model for phase identification from mixture samples consisting of several phases. The training data are mixed patterns consisting of 1,785,405 synthetic XRD from the Sr-Li-Al-O phase space. The resulting CNN can not only identify the phases but also predict the compound fraction in the mixture. A similar CNN for XRD approach was utilized by Wang et al.6 for fast identification of metal-organic frameworks (MOFs), where experimental spectral noises were extracted and synthesized with theoretical XRD for training 
+data augmentation. These models have all shown remarkable successes in identifying the presence of phases. An alternative idea was proposed by \cite{Dong.7}, where instead of recognizing only phases from CNN, the proposed parameter quantification network (PQ-Net) was able to extract physico-chemical information. The PQ-Net yields accurate predictions for scale factors, crystalline sizes, and lattice parameters for simulated and experimental XRD spectra. The work by \cite{Aguiar.8} took a step further and proposed a modular neural network architecture that enables the combination of diffraction patterns and chemistry data and provided a ranked list of predictions. The ranked list predictions provide flexibility and overcome the overconfidence in model predictions. In practical applications, the AI-driven XRD identification can be beneficial for high-throughput materials discovery, as shown by \cite{Maffettone.9} In their work, an ensemble of fifty CNN models was trained on synthetic data reproducing experimental variations (missing peaks, broadening, peaking shifting, noises). The model ensemble is capable of predicting the probability of each category label. A similar data augmentation idea was adopted by \cite{Oviedo.10}, where experimental XRD data for 115 thin-file metal-halides were measured, and CNN models training on the augmented XRD data achieved accuracies of 93\% and 89\% for classifying dimensionality and space group, respectively. 
+
+Other than XRD, the XAS, Raman, infrared spectra, etc., also contain rich structural information about the material. Unlike XRD, where relatively simple theories and equations exist to relate structures to the spectral patterns, the relationships between general spectra and structures are somewhat illusive. This difficulty has created a higher demand for machine learning models to learn structural information from other spectra.  For instance, the XAS, including the X-ray near-edge spectroscopy and extended X-ray absorption fine structure or EXAFS, is usually used to analyze the structural information on an atomic level. However, the high signal-to-noise XANES region has no equation for data fitting. Deep learning modeling of XAS data is fascinating and offers unprecedented insights.~\cite{Timoshenko} used neural networks to predict the coordination numbers of $Pt_{11}$ and $Cu_{12}$ in nanoclusters from the XANES, as illustrated in Figure 6c. Aside from the high accuracies, the neural network also offers high prediction speed and new opportunities for quantitative XANES analysis.~\cite{Timoshenko.13} further carried out a novel analysis of EXAFS using deep learning. Although EXAFS analysis has an explicit equation to fit, the study is limited to the first few coordination shells and on relatively ordered materials.  ~\cite{Timoshenko.13} first transformed the EXAFS data into 2D maps with wavelet transform and then supplied the 2D data to a neural network model. The model can instantly predict relatively long-range radial distribution function, offering \emph{in situ} local structure analysis of materials. The advent of high-throughput XAS databases has recently unveiled more possibilities for machine learning models to be deployed using XAS data. For example,~\cite{Zheng.1} used an ensemble learning method to match and fast search new spectra in the XASDb. Later, the same authors developed a random forest model to predict atomic environment labels from the XANES spectra directly~\cite{?}. Similar approaches were also adopted by~\cite{Torrisi.15} In practical applications, such XANES data and deep learning have limitless potentials. For example,~\cite{Andrejevic.16} used the XASDb data together with the topological materials database and constructed CNN models to classify the topology of materials from the XANES and symmetry group inputs, as shown in Figure 6d. The model correctly predicted 81\% topological and 80\% trivial cases and achieved 90\% accuracy in material classes that contain certain elements. 
+
+Raman, infrared, and other vibrational spectroscopies provide structural fingerprints and are usually used to discriminate and estimate the concentration of components in a mixture. For example,~\cite{Madden.17} have used neural network models to predict the concentration of illicit materials in a mixture using the Raman spectra. Interestingly, several groups have independently found that deep learning models outperform chemometrics analysis in vibrational spectroscopies~\cite{18,19}. For learning vibrational spectra, the number of training spectra is usually less than or on the order of the number of features (intensity points), and the models can easily overfit. Hence, dimensional reduction strategies are commonly used to compress the information dimension using, for example, principal component analysis (PCA)\cite{20,21}. Deep learning approaches do not have such concerns and offer elegant and unified solutions. For example, \cite{Liu.22} applied CNN models to the Raman spectra in the RRUFF spectral database and show that CNN models outperform classical machine learning models such as SVM in classification tasks. More deep learning applications in vibrational spectral analysis can be found in a recent review by~\cite{Yang.23}.
+
+Although most current deep learning work focuses on the inverse problem, i.e., predicting structural information from the spectra, some innovative approaches also solve the forward problems by predicting the spectra from the structure. In this case, the spectroscopy data can be viewed simply as a high-dimensional material property of the structure. This is most common in molecular science, where predicting the infrared spectra~\cite{24,25}, molecular excitation spectra~\cite{26}, etc., is of particular interest. In the early 2000s, ~\cite{Selzer.24} and ~\cite{Kostka.25} attempted predicting the infrared spectra directly from the molecular structural descriptors using neural networks. Non-deep learning models can also be used to perform such tasks to a reasonable accuracy~\cite{27}. For deep learning models, \cite{Chen.28} used a Euclidean neural network (E(3)NN) to predict the phonon density of state (DOS) spectra from atom positions and element types, as shown in Figure 6a. The E(3)NN model captures symmetries of the crystal structures, with no need to perform data augmentation to achieve target invariances. Hence the E(3)NN model is extremely data-efficient and can give reliable DOS spectra prediction and heat capacity using relatively sparse data of 1200 calculation results on 65 elements. A similar idea was also used to predict the XAS spectra. ~\cite{Carbone.29} used a message passion neural network (MPNN) to predict the O and N K-edge XANES spectra from the molecular structures in the QM9 database\cite{30}. The training XANES data were generated using the FEFF package~\cite{feff}. The trained MPNN model reproduced all prominent peaks in the predicted XANES, and 90\% of the predicted peaks are within 1 eV of the FEFF calculations. Similarly,~\cite{Rankine.32} started from the two-body radial distribution function (RDC) and used a deep neural network model to predict the Fe K-edge XANES spectra for arbitrary local environments. 
+
+
+In addition to learn the structure-spectra or spectra-structure relationships, a few works have also explored the possibility of relating spectra to other material properties in a non-trivial way. The DOSnet proposed by~\cite{Fung.33} (Figure 6b) uses the electronic DOS spectra calculated from DFT as inputs to a CNN model to predict the adsorption energies of H, C, N, O, S and their hydrogenated counterparts, CH, CH2, CH3, NH, OH, and SH,  on bimetallic alloy surfaces. This approach extends the previous d-band theory~\cite{34}, where only the d-band center, a scalar, was used to correlate with the adsorption energy on transition metals. \cite{Stein.35} tried to learn the mapping between the image and the UV-vis spectrum of the material using the conditional variational encoder (cVAE) with neural network models as the backbone. Such models can generate the UV-vis spectrum directly from a simple material image, offering much faster material characterizations.
+
+\subsubsection{Software libraries }
+\begin{table}[h]
+
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:spectral-data}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+DB name & Description & Link  & Ref\\
+\midrule
+DOSNet   &  \url{https://github.com/vxfung/DOSnet}   & \cite{fung2021machine}  \\
+PCA-CGCNN   &  \url{https://github.com/kihoon-bang/PCA-CGCNN}   & \cite{bang2021accelerated}  \\
+
+
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsection{Image based models}\label{sec:image}
+
+Some of the common imaging techniques are SEM, STM, STEM, and TEM. These data can be again obtained from theory and experiments. Such images provide  local atomic and mesoscopic structures, distribution and type of defects and their dynamics which are critically linked to the functionality and performance of the materials. Atomic-scale imaging has recently become widespread and near routine over the past few decades  due to aberration corrected scanning transmission electron microscopy. Nevertheless, it is still difficult to deal with a large corpus of image data and the immediate need of automated image analysis with methods such DL becomes important. Non-DL methods require too much manual identification of image features which are suitable for DL methods. The deep learning approach allows us to train models on available labeled images (training set) which then can be used to predict accurate 1) image-level and/or 2) pixel level classification of new data.Some of the common software packages used for image classification/recognition tasks are: TorchVision, and OpenCV, Scikit-Image.
+
+https://arxiv.org/abs/2107.13841
+
+\subsubsection{Software libraries for image analysis and generation}
+Recently, there has been a rapid development in the field of image learning tasks for materials leading to several useful packages. We list some of them in Table XX
+
+
+\begin{table}[h]
+\begin{minipage}{174pt}
+\caption{Imaging datasets.}\label{tab:image-data}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Package Name   & Link  & Ref\\
+\midrule
+PyCroscopy   &  \url{https://github.com/pycroscopy/pycroscopy}   & \cite{somnath2019usid}  \\
+Prismatic   &  \url{https://github.com/prism-em/prismatic}   & \cite{ophus2017fast}  \\
+py4DSTEM   &  \url{https://github.com/py4dstem/py4DSTEM}   & \cite{savitzky2020py4dstem}  \\
+abTEM   &  \url{https://github.com/jacobjma/abTEM}   & \cite{madsen2021abtem}  \\
+QSTEM   &  \url{https://github.com/QSTEM/QSTEM}   & \cite{?}  \\
+AtomVision   &  \url{https://github.com/JARVIS-Materials-Design/atomvision}   & \cite{?}  \\
+MuSTEM   &  \url{https://github.com/HamishGBrown/MuSTEM}   & \cite{allen2015modelling}  \\
+AtomAI   &  \url{https://github.com/pycroscopy/atomai}   & \cite{?}  \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsubsection{Image datasets}
+
+Image datasets for materials can come from either experiments or simulations. Software libraries mentioned above can be used to generate images such as STM/STEM. Images can also be obtained from the literature. A few common examples for image datasets is shown below in Table~\ref{tab:image-data}:
+
+
+\begin{table}[h]
+\begin{minipage}{174pt}
+\caption{Imaging datasets.}\label{tab:image-data}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Package Name   & Link  & Ref\\
+\midrule
+JARVIS-STM   &  \url{https://jarvis.nist.gov/jarvisstm/}   & \cite{?}  \\
+atomagined   &  \url{https://github.com/MaterialEyes/atomagined}   & \cite{?}  \\ 
+deep damage & \url{https://git.rwth-aachen.de/Sandra.Korte.Kerzel/DeepDamage/-/tree/base} & \cite{kusche2019large} \\
+NanoSEM & \url{https://doi.org/10.1038/sdata.2018.172} & \cite{aversa2018first} \\ 
+UHCSDB & \url{http://hdl.handle.net/11256/940} & \cite{10.1007/s40192-017-0097-0} \\
+UHCS microconstituent dataset & \url{http://hdl.handle.net/11256/964} & \cite{10.1017/S1431927618015635} \\
+SmBFO & \url{https://drive.google.com/uc?id=1PwaddcnZoXr_o2K_RTsVM1Uky8ov7yNT} & \cite{ziatdinov2020causal} \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+\subsubsection{Applications to SEM}
+Some of the common deep learning tasks for SEM images are: 1) morphology based classification , 2) enhancement of image quality. A few works listing the application of  DL to SEM images is shown in Table.X
+\subsubsection{Applications to STEM}
+While SEM images are useful for getting images on the scale of microns, STEM can provide images upto sub-Angstrom level resolutions. STEM is widely used for capturing real time physics phenomena such as  crystallographic structure transformation and defects behavior. Especially high angle annular dark field (HAADF)-STEM can provide an atomic number-contrast (Z-contrast) imaging which can be used to directly distinguish the constituent elements based on the contrast. Some of the works for DL for STEM is listed in Table.X
+\subsubsection{Applications to SPM}
+Scanning probe microscopy (SPM) uses a physical probe or tip that spans over the surface of a material and detects electronic signals in a) constant current mode or b) constant height mode. Common SPM techniques include STM and AFM. Some of the DL applications for SPM are shown in Table X.
+
+\subsection{Natural language processing}\label{sec:nlp}
+
+Most of existing knowledge in the materials domain is currently unavailable as structured information and only exists as unstructured text, tables or images in various publications. There exists a great opportunity to use natural language processing (NLP) techniques to convert text to structured data or to directly learn and make inferences from text information. However, as a relatively new field within materials science, many challenges remain unsolved in this domain.
+
+
+\subsubsection{Data sets for NLP}
+
+Data sets relevant to natural language processing include peer-reviewed journal articles, articles published on preprint servers such as arxiv or chemrxiv, patents, and online material such as Wikipedia. Unfortunately, being able to access or use most such data sets remains difficult. Peer-reviewed journal articles are typically subject to copyright restrictions and thus difficult to obtain, especially in the large numbers required for machine learning. Many publishers now offer text and data mining (TDM) agreements that can be signed online, and which allow at least a limited, restricted amount of work to be performed. However, gaining access to the full text of a large number of publications still typically requires strict and dedicated agreements with each publisher. The major advantage of working with publishers is that they have often already converted the articles from a document format such as PDF into an easy-to-parse format such as HTML. In contrast, whereas articles on preprint servers and patents are typically available with fewer restrictions, they are typically available only as PDF files. Currently, it remains difficult to properly parse text from PDF files in a reliable manner, even when the text is embedded in the PDF. Therefore, new tools that can easily and automatically convert such content into well-structured HTML format with few residual errors would likely have a major impact on the field. Finally, online sources of information such as Wikipedia can serve as another type of data source, however often such online sources are more difficult to verify in terms of accuracy and also do not contain as much domain-specific information as the research literature.
+
+
+\subsubsection{Software libraries for NLP}
+
+Applying NLP to a raw data set involves multiple steps, including retrieving the data, various forms of "pre-processing" (sentence and word tokenization, word stemming and lemmatization, featurization such as word vectors or part of speech tagging), and finally machine learning for information extraction (e.g., named entity recognition, entity relationship modeling, question and answer, or others). Three exist multiple software libraries to aid in materials NLP, as described in Table~\ref{tab:nlp-sw}.
+We note that although many of these steps can in theory be performed by general-purpose NLP libraries such as NLTK~\cite{nltk}, SpaCy~\cite{spacy}, or AllenNLP~\cite{allenNLP}, the specialized nature of chemistry and materials science text (including the presence of complex chemical formulas) often leads to errors. For example, researchers have developed specialized codes to perform pre-processing that better detect chemical formulas (and not split them into separate tokens or apply stemming/lemmatization to them) and scientific phrases and notation such as oxidation states or symbols for physical units. Similarly, chemistry-specific codes for extracting entities are better at extracting the names of chemical elements (e.g., recognizing that "He" likely represents helium and not a male pronoun) and abbreviations for chemical formulas. Finally, word embeddings that convert words such as "manganese" into numerical vectors for further data mining are more informative when trained specifically on materials science text versus more generic texts, even when the latter data sets are larger [https://doi.org/10.1038/s41586-019-1335-8]. Thus, domain-specific tools for NLP are required in nearly all aspects of the pipeline. The main exception is that the architecture of the specific neural network models used for information extraction (e.g., LSTM, BERT, or architectures used to generate word embeddings such as word2vec or GloVe) are typically not modified specifically for the materials domain. Thus, much of the materials and chemistry-centric work currently regards data retrieval and appropriate preprocessing. A longer discussion of this topic, with specific examples, can be found in refs. [doi: 10.1016/j.isci.2021.102155 ; https://doi.org/10.1063/5.0021106].
+
+\begin{table}[h]
+
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:nlp-sw}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+DB name & Description & Link  & Ref\\
+\midrule
+QM9   &  small organic molecules made up of CHONF  & https://figshare.   & data 3  \\
+
+ANI   &  small organic molecules made up of CHONF  & https://figshare.   & data 3  \\
+
+
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+
+
+\subsubsection{Applications for Materials discovery}
+
+\subsubsection{Application for information extraction and search}
+
+
+\section{Uncertainty predictions}\label{sec:uncertainty}
+Uncertainty can be of two types: “epistemic” and “aleatoric” uncertainty. Epistemic uncertainty arises from uncertainty in the parameters of the model. This uncertainty is high for out of distribution data, but also for example for informative data points in active learning . Aleatoric uncertainty is uncertainty inherent in the data such as an image of a 7 that is similar to a 9. In this case, the true class cannot be determined.
+
+
+\section{Limitations, challenges}\label{sec:challenges}
+
+Although DL methods in ML have various fascinating opportunities for materials design, they have several limitations and there is much room to improve. For example, chemical formula formula only based methods do not consider structure so they in principle cannot capture phenomena such as phase transitions. They have been found to severely fail when applied on large materials databases [REF]. Atomistic graph based predictions, though considered full atomistic description, are tested on bulk materials only and not for defective systems or for multi-dimensional phases space exploration such as using genetic algorithms. In terms of images and spectra, the experimental data are too noisy most of the time and require much manipulation before applying DL, while theory based simulated data can be either noise-free and do not capture realistic scenarios.
+
+\section{Conclusions}\label{sec:conclusion}
+
+
+
+\bibliography{sn-bibliography}% common bib file
+%% if required, the content of .bbl file can be included here once bbl is generated
+%%\input sn-article.bbl
+
+%% Default %%
+%%\input sn-sample-bib.tex%
+
+\end{document}

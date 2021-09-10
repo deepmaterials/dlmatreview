@@ -116,7 +116,7 @@ https://docs.dgl.ai/en/0.6.x/tutorials/models/index.html
 
 \subsubsection{Types of GNNs}
 
-Graph neural networks (GNNs) are deep learning methods that operate on graph domain and can capture the dependence of graphs via message passing between the nodes and edges of graphs. There are two key steps in GNN training: a) we first aggregate information from neighbors and b) update the nodes. Importantly, aggregation is permutation invariant. GNNs are probably the most popular AI method at present. Based on the aggregation methodology, there could be different variants of GNNs such as Graph convolutional network (GCN)~\cite{kipf2016semi}, Graph attention network (GAT)~\cite{velivckovic2017graph}, Relational-GCN~\cite{?}, graph recurrent network (GRN)~\cite{?}, Graph isomerism network (GIN)~\cite{xu2018powerful}, and Line graph neural network (LGNN)~\cite{chen2017supervised}.
+Graph neural networks (GNNs) are deep learning methods that operate on graph domain and can capture the dependence of graphs via message passing between the nodes and edges of graphs. There are two key steps in GNN training: a) we first aggregate information from neighbors and b) update the nodes. Importantly, aggregation is permutation invariant. GNNs are probably the most popular AI method at present. Based on the aggregation methodology, there could be different variants of GNNs such as Graph convolutional network (GCN)~\cite{kipf2016semi}, Graph attention network (GAT)~\cite{velivckovic2017graph}, Relational-GCN~\cite{schlichtkrull2017modeling}, graph recurrent network (GRN)~\cite{song-etal-2018-graph}, Graph isomerism network (GIN)~\cite{xu2018powerful}, and Line graph neural network (LGNN)~\cite{chen2017supervised}.
 Graph convolutional neural networks are the most popular GNNs. In GCN, node attributes h, which can be different for different applications, are updated recursively following the Eq. \ref{eq:gcn-update}. 
 
 \begin{equation}\label{eq:gcn-update}
@@ -149,47 +149,18 @@ Some of the main components of successfully applying DL to materials are:
 
 
 \subsection{Full Atomistic structure representations}\label{sec:atomistic}
-One of the most common applications of DL models for atomistic data is for pre-screening of materials for conventional computational methods such as DFT and MD. As mentioned above DL is particularly  suitable for large and unstructured data. If we consider 118 elements in the periodic table and even choose 5 elements (common for an alloy), the total number of cases are 118 choose 5 = 1.75x108 and 6.21x1033 if we choose 50 elements. Note that this is just elemental considerations. Including different space groups (230), prototypes, deformed (stretch, compress, shear etc) , defective (vacancies, intersititals, substitutions, grain boundaries, voids, dislocations etc), crystalline, amorphous the possible number of materials could easily reach 10100 which is huge. It is almost impossible to simulate such a huge number of materials using conventional methods such as DFT and DL models become important.
+Atomic structure of a material usually consists of crystallographic coordinates and elemental composition information of a material. Arbitrary number of atoms and types of elements in a system poses a challenge to apply traditional ML algorithms for atomistic predictions. DL using graph based methods are an obvious strategy to tackle this problem. Recently there have been development of large datasets of atomistic structure and properties for molecules, solids and proteins, which are precursors for DL methods.
+There have been several previous attempts to represent crystals and molecules on a fixed size descriptors such as Coulomb Matrix, CFID, PRDF, Voronoi tessellation. Recently graph neural network methods have been shown to surpass previous hand-crafted feature set and hence they can be applied to the properties of interest mentioned above. In
 
-The atomic structure and chemistry data doesn't lie on a predefined fixed grid hence deep learning is a compelling tool to tackle such problems. The atomic structure information is obtained from XRD/NMR etc experiments and also hypothetical structures can be generated using methods such as SQS and genetic algorithms. In Table~\ref{tab:atomistic-datasets} we provide some of the commonly used datasets used for atomistic DL noldes for molecules,solids and proteins.
-There have been several previous attempts to represent crystals and molecules on a fixed size descriptors such as Coulomb Matrix, CFID, PRDF, Voronoi tessellation. Some of the common applications of such ML models are for perovskites, 2D materials, dielectric, piezoelectric, solar-cells, thermoelectrics, topologically non-trivial materials, high-strength, catalytic materials etc. Recently graph neural network methods such as SchNet, CGCNN, MegNet, DimeNet, ALIGNN, iCGCNN have been shown to surpass previous hand-crafted feature set and hence they can be applied to the properties of interest mentioned above. In Table~\ref{tab:atomistic-deep-learning} we provide deep learning software packages used for atomistic materials design. The type of models includes general property (GP) predictors and interatomic force fields (FF). The models have been demonstrated in molecules (Mol), solid state materials (Sol) or proteins (Pro). For some force fields, high performance large scale implementations (LSI) that leverage paralleling computing exist. Some models use only compositions (Comp) as inputs and are tagged accordingly. Such methodologies have been used to train force-fields for molecular dynamics simulations as well.
+\subsubsection{Databases }
+In Table~\ref{tab:atomistic-databases} we provide some of the commonly used datasets used for atomistic DL noldes for molecules,solids and proteins. We note that the computational methods method used for different datasets are different and many of them are continuously evolving. Generally it takes years to generate such databases using conventional methods such as density functional theory, while DL methods can be used to make predictions with much reduced computational cost and reasonable accuracy.
 
-\subsubsection{Software libraries }
-[TODO: Arrange alphabetically]
-\begin{table}[h]
-\begin{minipage}{174pt}
-\caption{Caption text}\label{tab:atomistic-deep-learning}%
-\begin{tabular}{@{}llll@{}}
-\toprule
-Model name & Reference implementation  & Ref\\
-\midrule
-SchNetPack  & \url{https://github.com/atomistic-machine-learning/schnetpack}    & \cite{schutt2018schnetpack}\\
-ALIGNN & \url{https://github.com/usnistgov/alignn} & \cite{?}\\
-CGCNN & \url{https://github.com/txie-93/cgcnn} & \cite{?}\\
-MEGNet & \url{https://github.com/materialsvirtuallab/megnet} & \cite{?}\\
-DimeNet & \url{https://github.com/klicperajo/dimenet} & \cite{?}\\
-MPNN   & \url{https://github.com/priba/nmp_qc}  &  \cite{?}\\
-ANI   & \url{https://github.com/isayev/ASE_ANI}     & \cite{?}  \\
-Amp  & \url{https://bitbucket.org/andrewpeterson/amp}    & \cite{?}  \\
-TensorMol & \url{https://github.com/jparkhill/TensorMol}   & \cite{?}  \\
-PROPhet  & \url{https://github.com/biklooost/PROPhet}    & \cite{?}  \\
-DeepMD & \url{https://github.com/deepmodeling/deepmd-kit} & \cite{?} \\
-AENet& \url{https://github.com/atomisticnet/aenet} & \cite{?} \\
-E3NN & \url{https://github.com/e3nn/e3nn}  & \cite{?} \\
-
-\botrule
-\end{tabular}
-\end{minipage}
-\end{table}
-
-
-\subsubsection{Datasets}
 [TODO: Arrange alphabetically]
 
 \begin{table}[h]
 
 \begin{minipage}{174pt}
-\caption{Caption text}\label{tab:atomistic-datasets}%
+\caption{Caption text}\label{tab:atomistic-databases}%
 \begin{tabular}{@{}llll@{}}
 \toprule
 DB name & Datasize & Web & Ref\\
@@ -218,8 +189,46 @@ MOAD   &  39 k & \url{http://www.bindingmoad.org/}   & \cite{benson2007binding} 
 \end{minipage}
 \end{table}
 
-\subsubsection{Applications}
+\subsubsection{Software libraries }
+ Table~\ref{tab:atomistic-deep-learning} we provide deep learning software packages used for atomistic materials design. The type of models includes general property (GP) predictors and interatomic force fields (FF). The models have been demonstrated in molecules (Mol), solid state materials (Sol) or proteins (Pro). For some force fields, high performance large scale implementations (LSI) that leverage paralleling computing exist [TODO: put category]. Some of these methods mainly used interatomic distances to build graphs while others use distances as well as bond angle information. Recently including bond angle within GNN have shown to drastically improve the performance with comparable computational timings.
+[TODO: Arrange alphabetically]
+\begin{table}[h]
+\begin{minipage}{174pt}
+\caption{Caption text}\label{tab:atomistic-deep-learning}%
+\begin{tabular}{@{}llll@{}}
+\toprule
+Model name & Reference implementation  & Ref\\
+\midrule
+SchNetPack  & \url{https://github.com/atomistic-machine-learning/schnetpack}    & \cite{schutt2018schnetpack}\\
+ALIGNN & \url{https://github.com/usnistgov/alignn} & \cite{choudhary2021atomistic}\\
+CGCNN & \url{https://github.com/txie-93/cgcnn} & \cite{xie2018crystal}\\
+MEGNet & \url{https://github.com/materialsvirtuallab/megnet} & \cite{chen2019graph}\\
+DimeNet & \url{https://github.com/klicperajo/dimenet} & \cite{klicpera2020directional}\\
+MPNN   & \url{https://github.com/priba/nmp_qc}  &  \cite{Gilmer2017}\\
+ANI   & \url{https://github.com/isayev/ASE_ANI}     & \cite{smith2017ani}  \\
+Amp  & \url{https://bitbucket.org/andrewpeterson/amp}    & \cite{khorshidi2016amp}  \\
+TensorMol & \url{https://github.com/jparkhill/TensorMol}   & \cite{yao}  \\
+PROPhet  & \url{https://github.com/biklooost/PROPhet}    & \cite{?}  \\
+DeepMD & \url{https://github.com/deepmodeling/deepmd-kit} & \cite{?} \\
+AENet& \url{https://github.com/atomisticnet/aenet} & \cite{?} \\
+E3NN & \url{https://github.com/e3nn/e3nn}  & \cite{?} \\
+neural-fingerprint & \url{https://github.com/HIPS/neural-fingerprint}  & \cite{?} \\
+DeepChemStable & \url{https://github.com/MingCPU/DeepChemStable}  & \cite{?} \\
+DeepChem & \url{https://github.com/deepchem/deepchem}  & \cite{?} \\
+\botrule
+\end{tabular}
+\end{minipage}
+\end{table}
 
+
+
+
+\subsubsection{Applications}
+ In this section we provide a few examples of solving materials science problems with DL methods trained on atomistic data. DL for atomistic materials can be used to a) integrate it with conventional methods to alleviate computational challenges, b) direct property predictions.The first application includes development of deeplearning based forcefields \cite{smith2017ani,behler2011atom}, predicting potential energy surfaces \cite{zhang2018deep}, adding corrections to computationally expensive ab initio calculations\cite{mcgibbon2017improving}, and alleviate computational expense of DFT or other wave function methods \cite{mills2017deep}. One of the major advantages of such applications are that they are very fast for making predictions, but the disadvantage is they still require a large dataset using computationally expensive methods to train.Models such as ALIGNN and MEGNet have been used to predict upto 50 properties of crystalline and molecular materials.Some of these properties include formation energies, and bandgaps it also consists several unique quantities such as solar-cell efficiency (spectroscopic limited maximum efficiency, SLME), topological spin-orbit spillage, dielectric constant with ($\epsilon$x (DFPT)) and without ionic contributions ($\epsilon$x (OPT, MBJ)), exfoliation energies for two-dimensional (2D), electric field gradients (EFG), Voigt bulk (Kv) and shear modulus (Gv), energy above convex hull (ehull),maximum piezoelectric stress (eij) and strain (dij) tensors, n-type and p-type Seebeck coefficient and power factors (PF), crystallographic averages of electron (me) and hole (mh) effective masses, highest occupied molecular orbital (HOMO), lowest unoccupied molecular orbital (LUMO), energy gap, zero-point vibrational energy (ZPVE), dipole moment, isotropic polarizability, electronic spatial extent, internal energy.
+ Xie et al. used CGCNN model to screen stable perovskite materials\cite{xie2018crystal} as well Hierarchical visualization of materials
+space \cite{xie2018hierarchical}. Park et al \cite{park2020developing} used iCGCNN to screen ThCr2Si2-type materials.Lugier et al used DL methods to predict thermoelectric properties \cite {laugier2018predicting},
+ DL for molecular materials have been used to predict technologically important properties such as aqueous solubility \cite{lusci2013deep} and toxicity\cite{xu2015deep}. There have been also several applications for identifying reasonable chemical space using DL methods such as autoencoders\cite{jin2018junction}, GAN \cite{sanchez2017optimizing} and reinforcement learning \cite{olivecrona2017molecular,you2018graph,putin2018reinforced}
+.
 \subsection{Chemical formula and segment representations}\label{sec:stoichiometric}
 One of the earliest applications for deep learning included smiles for molecules, elemental fractions and chemical descriptors for solids and sequence of protein names as descriptors. Such descriptors lack explicit inclusion of atomic structure information but are still useful for various pre-screening applications for both theoretical and experimental data. 
 
@@ -353,13 +362,13 @@ DB name & Description & Link  & Ref\\
 \midrule
 DOSNet   &  \url{https://github.com/vxfung/DOSnet}   & \cite{fung2021machine}  \\
 PCA-CGCNN   &  \url{https://github.com/kihoon-bang/PCA-CGCNN}   & \cite{bang2021accelerated}  \\
-
+autoXRD   &  \url{https://github.com/PV-Lab/autoXRD}   & \cite{?}  \\
 
 \botrule
 \end{tabular}
 \end{minipage}
 \end{table}
-
+https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.124.156401
 \subsection{Image based models}\label{sec:image}
 
 Some of the common imaging techniques are SEM, STM, STEM, and TEM. These data can be again obtained from theory and experiments. Such images provide  local atomic and mesoscopic structures, distribution and type of defects and their dynamics which are critically linked to the functionality and performance of the materials. Atomic-scale imaging has recently become widespread and near routine over the past few decades  due to aberration corrected scanning transmission electron microscopy. Nevertheless, it is still difficult to deal with a large corpus of image data and the immediate need of automated image analysis with methods such DL becomes important. Non-DL methods require too much manual identification of image features which are suitable for DL methods. The deep learning approach allows us to train models on available labeled images (training set) which then can be used to predict accurate 1) image-level and/or 2) pixel level classification of new data.Some of the common software packages used for image classification/recognition tasks are: TorchVision, and OpenCV, Scikit-Image.
@@ -372,7 +381,7 @@ Recently, there has been a rapid development in the field of image learning task
 
 \begin{table}[h]
 \begin{minipage}{174pt}
-\caption{Imaging datasets.}\label{tab:image-data}%
+\caption{Imaging datasets.}\label{tab:image-software}%
 \begin{tabular}{@{}llll@{}}
 \toprule
 Package Name   & Link  & Ref\\
@@ -385,6 +394,8 @@ QSTEM   &  \url{https://github.com/QSTEM/QSTEM}   & \cite{?}  \\
 AtomVision   &  \url{https://github.com/JARVIS-Materials-Design/atomvision}   & \cite{?}  \\
 MuSTEM   &  \url{https://github.com/HamishGBrown/MuSTEM}   & \cite{allen2015modelling}  \\
 AtomAI   &  \url{https://github.com/pycroscopy/atomai}   & \cite{?}  \\
+NionSwift   &  \url{https://github.com/nion-software/nionswift}   & \cite{?}  \\
+EENCM   &  \url{https://github.com/ceright1/Prediction-material-property}   & \cite{?}  \\
 \botrule
 \end{tabular}
 \end{minipage}
@@ -409,6 +420,7 @@ NanoSEM & \url{https://doi.org/10.1038/sdata.2018.172} & \cite{aversa2018first} 
 UHCSDB & \url{http://hdl.handle.net/11256/940} & \cite{10.1007/s40192-017-0097-0} \\
 UHCS microconstituent dataset & \url{http://hdl.handle.net/11256/964} & \cite{10.1017/S1431927618015635} \\
 SmBFO & \url{https://drive.google.com/uc?id=1PwaddcnZoXr_o2K_RTsVM1Uky8ov7yNT} & \cite{ziatdinov2020causal} \\
+Diffranet & \url{https://github.com/arturluis/diffranet} & \cite{?} \\
 \botrule
 \end{tabular}
 \end{minipage}
@@ -418,6 +430,7 @@ SmBFO & \url{https://drive.google.com/uc?id=1PwaddcnZoXr_o2K_RTsVM1Uky8ov7yNT} &
 Some of the common deep learning tasks for SEM images are: 1) morphology based classification , 2) enhancement of image quality. A few works listing the application of  DL to SEM images is shown in Table.X
 \subsubsection{Applications to STEM}
 While SEM images are useful for getting images on the scale of microns, STEM can provide images upto sub-Angstrom level resolutions. STEM is widely used for capturing real time physics phenomena such as  crystallographic structure transformation and defects behavior. Especially high angle annular dark field (HAADF)-STEM can provide an atomic number-contrast (Z-contrast) imaging which can be used to directly distinguish the constituent elements based on the contrast. Some of the works for DL for STEM is listed in Table.X
+https://ascimaging.springeropen.com/articles/10.1186/s40679-020-00070-x
 \subsubsection{Applications to SPM}
 Scanning probe microscopy (SPM) uses a physical probe or tip that spans over the surface of a material and detects electronic signals in a) constant current mode or b) constant height mode. Common SPM techniques include STM and AFM. Some of the DL applications for SPM are shown in Table X.
 
@@ -463,6 +476,8 @@ ANI   &  small organic molecules made up of CHONF  & https://figshare.   & data 
 
 \section{Uncertainty predictions}\label{sec:uncertainty}
 Uncertainty can be of two types: “epistemic” and “aleatoric” uncertainty. Epistemic uncertainty arises from uncertainty in the parameters of the model. This uncertainty is high for out of distribution data, but also for example for informative data points in active learning . Aleatoric uncertainty is uncertainty inherent in the data such as an image of a 7 that is similar to a 9. In this case, the true class cannot be determined.
+
+\section{Bayesian deep learning approaches}\label{sec:bayesian}
 
 
 \section{Limitations, challenges}\label{sec:challenges}

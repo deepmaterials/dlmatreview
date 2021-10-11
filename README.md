@@ -69,8 +69,8 @@ Software packages
 # SMILES and fragments 
 
 | Software name | Web |
+| --- | --- | 
 | DeepSMILES | [https://github.com/baoilleach/deepsmiles](https://github.com/baoilleach/deepsmiles) | 
-| --- | --- | --- |
 | ChemicalVAE | [https://github.com/aspuru-guzik-group/chemicalvae](https://github.com/aspuru-guzik-group/chemical_vae) | 
 | CVAE | [https://github.com/jaechanglim/CVAE](https://github.com/jaechanglim/CVAE) | 
 | DeepChem | [https://github.com/deepchem/deepchem](https://github.com/deepchem/deepchem) |

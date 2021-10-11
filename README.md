@@ -109,6 +109,38 @@ Software packages
 | autoXRD | Sol | [https://github.com/PV-Lab/autoXRD](https://github.com/PV-Lab/autoXRD) | [[147](#_bookmark146)] |
 
 
+# Image based
+
+|DB Name |Link |Ref|
+| --- | --- | --- |
+JARVIS-STM |https://jarvis.nist.gov/jarvisstm |[184]|
+atomagined| https://github.com/MaterialEyes/atomagined [185]|
+deep damage| https://git.rwth-aachen.de/Sandra.Korte.Kerzel/DeepDamage/ [186]|
+NanoSEM |https://doi.org/10.1038/sdata.2018.172 [187]|
+UHCSDB |http://hdl.handle.net/11256/940 [188]|
+UHCS microconst. DB |http://hdl.handle.net/11256/964 [189]|
+SmBFO |https://drive.google.com/ |[190]|
+Diranet| https://github.com/arturluis/diranet |[191]|
+Peregrine v2021-03| https://doi.org/10.13139/ORNLNCCS/1779073 [192]|
+Microscopy Datasets| https://github.com/Jerey-Ede/datasets/wiki [193]|
+Software packages
+|Package Name |Link |Ref|
+| --- | --- | --- |
+PyCroscopy |https://github.com/pycroscopy/pycroscopy [194]|
+Prismatic| https://github.com/prism-em/prismatic [185]|
+py4DSTEM |https://github.com/py4dstem/py4DSTEM [195]|
+abTEM| https://github.com/jacobjma/abTEM [196]|
+QSTEM| https://github.com/QSTEM/QSTEM [197]|
+MuSTEM| https://github.com/HamishGBrown/MuSTEM [198]|
+AICrystallographer| https://github.com/pycroscopy/AICrystallographer [199]|
+AtomAI| https://github.com/pycroscopy/atomai [199]|
+NionSwift| https://github.com/nion-software/nionswift [200]|
+EENCM| https://github.com/ceright1/Prediction-material-property [201]|
+DefectSegNet| https://github.com/rajatsainju/DefectSegNet [202]|
+AMPIS |https://github.com/rccohn/AMPIS [203]|
+partial-STEM| https://github.com/Jerey-Ede/partial-STEM/tree/1.0.0 [204]|
+ZeroCostDL4Mic| https://github.com/HenriquesLab/ZeroCostDL4Mic [205]|
+
 # NLP
 
 

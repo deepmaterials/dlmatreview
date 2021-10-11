@@ -1,8 +1,8 @@
 # dlmatreview
 
-# Atomistic databases and software packages
-***
+This repository contains links to software packages and databases used in deep-learning applications for materials science and engineering. If you would like to contribute similar repositories/packages, please fork this repository, add the information in the current format and make a pull request to this repository. We welcome your contributions!
 
+# Atomistic databases and software packages
 
 | Database name| Datasize| Web | 
 | --- | --- | --- | 

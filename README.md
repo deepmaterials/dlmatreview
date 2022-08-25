@@ -4,7 +4,7 @@ This repository contains links to software packages and databases used in deep-l
 
 # Citation
 
-[https://arxiv.org/abs/2110.14820](https://arxiv.org/abs/2110.14820)
+[https://www.nature.com/articles/s41524-022-00734-6](https://www.nature.com/articles/s41524-022-00734-6)
 
 
 # Atomistic databases and software packages

@@ -164,3 +164,4 @@ ZeroCostDL4Mic| https://github.com/HenriquesLab/ZeroCostDL4Mic |
 | SynthesisProject | [https://www.synthesisproject.org](https://www.synthesisproject.org/) | 
 | tmChem | [https://www.ncbi.nlm.nih.gov/research/bionlp/Tools/tmchem/](https://www.ncbi.nlm.nih.gov/research/bionlp/Tools/tmchem/) |
 
+Seel also: https://github.com/JuDFTteam/best-of-atomistic-machine-learning/

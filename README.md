@@ -104,6 +104,7 @@ Software packages
 | SpectraBase | ? | [https://spectrabase.com/](https://spectrabase.com/) |
 | SOPspectrallib. | 325 | [https://soprano.kikirpa.be/index.php?lib=sop](https://soprano.kikirpa.be/index.php?lib=sop) | 
 | HTEM | 140000 | [https://htem.nrel.gov/](https://htem.nrel.gov/) | 
+| CRD | 5099 | [https://ramandb.oulu.fi/](https://ramandb.oulu.fi/) | 
 
 
 

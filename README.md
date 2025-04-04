@@ -153,6 +153,8 @@ ZeroCostDL4Mic| https://github.com/HenriquesLab/ZeroCostDL4Mic |
 
 | Softwarename | Link |
 | --- | --- | 
+| ChemNLP | [https://github.com/usnistgov/atomgpt](https://github.com/usnistgov/atomgpt) | 
+| AtomGPT | [https://github.com/usnistgov/chemnlp](https://github.com/usnistgov/chemnlp) | 
 | Borges | [https://github.com/CederGroupHub/Borges](https://github.com/CederGroupHub/Borges) | 
 | ChemDataExtractor | [http://chemdataextractor.org](http://chemdataextractor.org/) |
 | ChemicalTagger | [https://github.com/BlueObelisk/chemicaltagger](https://github.com/BlueObelisk/chemicaltagger) | 
